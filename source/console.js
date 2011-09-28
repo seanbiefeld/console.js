@@ -27,7 +27,7 @@ var Console = {
 			var evaluation ="nothing";
 			var inputValue = input.val();
 			
-			history.append("&gt;&gt; " + inputValue + "<br />");
+			history.append("&gt;&gt; " + inputValue.replace(/>/gi,"&gt;").replace(/</gi,"&lt;") + "<br />");
 			try
 			{
 				var codeToRun = "";
