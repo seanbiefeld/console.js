@@ -38,6 +38,12 @@ var Console = {
 					history.append("&gt;&gt; " + inputValue.replace(/>/gi,"&gt;").replace(/</gi,"&lt;") + "<br />");
 					break;
 				}
+				case "ABOUT":
+				case "HELP":{
+					history.append('&gt;&gt; welcome to console.js!<br />&gt;&gt; the intent of this application is to provide a <a href="http://en.wikipedia.org/wiki/Read-eval-print_loop" style="color:#7386a5" target="_blank">REPL</a> type interactive interface to encourage learning, debugging and having fun with javascript<br />&gt;&gt; any typical javascript can be called, plus jquery is referenced, so that can be called as well<br/><br />&gt;&gt; <span style="font-weight:bolder;">commands: </span><br /><br /><div style="padding-left: 70px;"><span style="font-weight:bold;">clear</span> - clears any previous functions,variables stored</span><br /><span style="font-weight:bold;">help,about</span> - about console.js, list of commands</div>');
+					Console.clearCode();
+					break;
+				}
 				default:{
 					try
 					{
