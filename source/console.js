@@ -42,7 +42,7 @@ var Console = {
 			
 				evaluation = Console.evaluateCode(codeToRun);
 				
-				if(evaluation)
+				if(evaluation || evaluation == 0)
 					history.append('<span style="color:#8F9D6A">=&gt; ' + evaluation + "</span><br/>");
 			}
 			catch(error){
