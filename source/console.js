@@ -5,9 +5,9 @@ $(document).ready(function(){
 
 var Console = {
 
-	code: "",
+	code: [],
 	clearCode: function(){
-		this.code = "";
+		this.code.splice(0,this.code.length);
 	},
 
 	evaluateCode: function(codeToRun){
@@ -20,6 +20,17 @@ var Console = {
 		$("<pre></pre>").addClass("history").appendTo(console);
 		$("<span></span>").html("&gt;").css("padding-right", "5px").appendTo(console);
 		$("<input></input>").addClass("input").keypress(this.codeEntered).appendTo(console).focus();
+	},
+
+	isStatement: function(value){
+		var isStatement = false;
+		isStatement |= value.trim().substr(0,3) == "for";
+		isStatement |= value.trim().substr(0,5) == "while";
+		isStatement |= value.trim().substr(0,2) == "do";
+		isStatement |= value.trim().substr(0,2) == "if";
+		isStatement |= value.trim().substr(0,5) == "switch";
+		isStatement |= value.trim().substr(0,3) == "try";
+		return isStatement;
 	},
 	
 	codeEntered: function (e) {
@@ -50,12 +61,26 @@ var Console = {
 					{
 						var codeToRun = "";
 					
-						if(inputValue.indexOf("var ") >= 0 || inputValue.indexOf("function ") >= 0 || inputValue.indexOf("[") >= 0){
-							codeToRun = Console.code + "\r\r ";
-							Console.code+="\r\r "+inputValue;
+						var isVariableDeclaration = inputValue.trim().substr(0,3) == "var";
+
+						if( isVariableDeclaration || inputValue.indexOf("function ") >= 0 || inputValue.indexOf("[") >= 0){
+							//codeToRun = Console.code + "\r\r ";
+							Console.code.push("\r\r "+inputValue);
 						}
 						else{
-							codeToRun = Console.code + "\r\r return " + inputValue + ";";
+							//codeToRun = Console.code + "\r\r return " + inputValue + ";";
+							for (item in Console.code){
+								codeToRun += "\r\r"+Console.code[item];
+							}
+							var lastCharIndex = inputValue.length - 1;
+
+							if(Console.isStatement(inputValue))
+								codeToRun += inputValue;
+							else
+								codeToRun += "\r\r return " + inputValue;
+
+							if(inputValue[lastCharIndex] != ';'&& inputValue[lastCharIndex] != '}')
+								codeToRun += ";";
 						}
 					
 						evaluation = Console.evaluateCode(codeToRun);
