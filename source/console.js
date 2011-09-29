@@ -1,5 +1,6 @@
 $(document).ready(function(){
-	Console.init();	
+	Console.init();
+	$("html").click(function(){ $(".input").focus();});
 });
 
 var Console = {
