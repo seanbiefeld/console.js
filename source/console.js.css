@@ -24,6 +24,7 @@
 .caret{
 	float:left;
 	display:inline;
+	padding-top: 3px;
 }
 
 ::-webkit-input-placeholder {
