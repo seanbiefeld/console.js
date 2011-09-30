@@ -1,0 +1,41 @@
+.console{
+	color:#aaa;
+	background-color:#333;
+	font-family: monospace;
+}
+
+.input{
+	border:none;
+	color:#aaa;
+	background-color:#333;
+	font-size:16pt;
+	outline:none;
+	font-family:monospace;
+	text-shadow: 0px -1px 0 #000;
+	width:100%;
+}
+
+.inputContainer{
+	width: auto;
+	border: none;
+	margin-left:14px;	
+}
+
+.caret{
+	float:left;
+	display:inline;
+}
+
+::-webkit-input-placeholder {
+	color: #444;
+	text-shadow: 0px -1px 0 #000;
+	font-style:italic;
+	font-size: 14pt;
+}
+
+:-moz-placeholder {
+	color: #444;
+	text-shadow: 0px -1px 0 #000;
+	font-style:italic;
+	font-size: 14pt;
+}

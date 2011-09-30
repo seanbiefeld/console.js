@@ -1,0 +1,7 @@
+$("<div></div>").css({width:"100px",height:"100px","background-color":"#3366ff"}).attr("id","mydiv").appendTo($("#container"))
+
+function grow(){$("#mydiv").animate({width:"100%"}, 2000)}
+
+function shrink(){$("#mydiv").animate({width:"100px"}, 2000)}
+
+function changeColor(newColor){$("#mydiv").css({'background-color':newColor});}
