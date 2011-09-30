@@ -18,8 +18,9 @@ var Console = {
 	init: function(){
 		var console = $("#console").addClass("console");
 		$("<pre></pre>").addClass("history").appendTo(console);
-		$("<span></span>").html("&gt;").css("padding-right", "5px").appendTo(console);
-		$("<input></input>").addClass("input").keypress(this.codeEntered).appendTo(console).focus();
+		$("<div></div>").html("&gt;").addClass("caret").appendTo(console);
+		var inputContainer = $("<div></div>").addClass("inputContainer").appendTo(console);
+		$("<input></input>").attr("placeholder","start scripting here...").addClass("input").keypress(this.codeEntered).appendTo(inputContainer).focus();
 	},
 
 	isStatement: function(value){
