@@ -36,7 +36,7 @@ var Console = {
 	codeEntered: function (e) {
 		"use strict";
 		if ((e.which && e.which === 13) || (e.keyCode && e.keyCode === 13)) {
-			var input, console, history, evaluation, inputValue, codeToRun, isVariableDeclaration, i, lastCharIndex;
+			var input, console, history, evaluation, inputValue;
 			input = $("#console input");
 			console = $("#console");
 			history = $("#console pre");
@@ -59,21 +59,21 @@ var Console = {
 
 			default:
 				try {
-					codeToRun = "";
+					var codeToRun = "";
 
-					isVariableDeclaration = inputValue.trim().substr(0, 3) === "var";
+					var isVariableDeclaration = inputValue.trim().substr(0, 3) === "var";
 
 					if (isVariableDeclaration || inputValue.indexOf("function ") >= 0 || inputValue.indexOf("[") >= 0) {
 						//codeToRun = Console.code + "\r\r ";
 						Console.code.push("\r\r " + inputValue);
 					} else {
 						//codeToRun = Console.code + "\r\r return " + inputValue + ";";
-						for (i = 0; i < Console.code.length; i++) {
+						for (var i = 0; i < Console.code.length; i++) {
 							if (Console.code[i]) {
 								codeToRun += "\r\r" + Console.code[i];
 							}
 						}
-						lastCharIndex = inputValue.length - 1;
+						var lastCharIndex = inputValue.length - 1;
 
 						if (Console.isStatement(inputValue)) {
 							codeToRun += inputValue;
