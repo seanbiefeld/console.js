@@ -1,5 +1,15 @@
 var Console = {
 	code: [],
+	codeAsString: function () {
+		"use strict";
+		var code;
+		for (var i = 0; i < Console.code.length; i++) {
+			if (Console.code[i]) {
+				code += "\r\r" + Console.code[i];
+			}
+		}
+		return code;
+	},
 	history: {
 		items: [],
 		position: Number.NaN,
@@ -8,6 +18,7 @@ var Console = {
 			this.items.splice(0, this.items.length);
 		},
 		nextItem: function () {
+			"use strict";
 			if (this.items.length > 0) {
 				if (this.position < this.items.length) {
 					this.position++;
@@ -16,6 +27,7 @@ var Console = {
 			}
 		},
 		previousItem: function () {
+			"use strict";
 			if (this.items.length > 0) {
 				if (isNaN(this.position)) {
 					this.position = this.items.length - 1;
@@ -64,7 +76,7 @@ var Console = {
 		isStatement = isStatement || value.trim().substr(0, 3) === "try";
 		return isStatement;
 	},
-	help: ' <br/><h3 style=""> --------| welcome to console.js |---------</h3> the intent of this application is to provide<br /> a <a href="http://en.wikipedia.org/wiki/Read-eval-print_loop" style="color:#7386a5" target="_blank">REPL</a> type interactive interface to encourage <br /> learning, debugging and having fun with javascript<br /> any typical javascript can be called, plus,<br /> jquery is referenced, so that can be used as well<br/><br /> <span style="font-weight:bolder;">commands: </span><br /><br /><div style="padding-left: 30px;"><span style="font-weight:bold;">clear</span> - clears any previous functions,variables</span><br /><span style="font-weight:bold;">help,about</span> - about console.js, list of commands<br/><span style="font-weight:bold;font-size:2em;">&uarr;</span> - previously typed items, back in history<br/><span style="font-weight:bold;font-size:2em;">&darr;</span> - previously typed items, forward in history</div><br/>',
+	help: ' <br/><h3 style=""> --------| welcome to console.js |---------</h3> the intent of this application is to provide<br /> a <a href="http://en.wikipedia.org/wiki/Read-eval-print_loop" style="color:#7386a5" target="_blank">REPL</a> type interactive interface to encourage <br /> learning, debugging and having fun with javascript<br /> any typical javascript can be called, plus,<br /> jquery is referenced, so that can be used as well<br/><br /> <span style="font-weight:bolder;">commands: </span><br /><br /><div style="padding-left: 30px;"><span style="font-weight:bold;">clear</span> - clears any previous functions,variables</span><br /><span style="font-weight:bold;">help,about</span> - about console.js, list of commands<br /><span style="font-weight:bold;">Console.code</span> - view previously entered members<br/><span style="font-weight:bold;font-size:2em;">&uarr;</span> - previously typed items, back in history<br/><span style="font-weight:bold;font-size:2em;">&darr;</span> - previously typed items, forward in history</div><br/>',
 	codeEntered: function (e) {
 		"use strict";
 		var input, console, history, evaluation, inputValue;
@@ -77,11 +89,13 @@ var Console = {
 		//go back in history
 		if ((e.which && e.which === 38) || (e.keyCode && e.keyCode === 38)) {
 			input.val(Console.history.previousItem());
+			return false;
 		}
 		
 		//go forward in history
 		if ((e.which && e.which === 40) || (e.keyCode && e.keyCode === 40)) {
 			input.val(Console.history.nextItem());
+			return false;
 		}
 		
 		if ((e.which && e.which === 13) || (e.keyCode && e.keyCode === 13)) {
@@ -103,21 +117,15 @@ var Console = {
 
 			default:
 				try {
-					var codeToRun = "";
-
 					var isVariableDeclaration = inputValue.trim().substr(0, 3) === "var";
 					var isFunction = inputValue.indexOf("function ") >= 0;
 					var isAssignment = inputValue.indexOf("=") >= 0;
-
+					var codeToRun = Console.codeAsString();
+					
 					if (isVariableDeclaration || isFunction || isAssignment) {
-						Console.evaluateCode(inputValue);
+						Console.evaluateCode(codeToRun + "\r\r" + inputValue);
 						Console.code.push("\r\r " + inputValue);
-					} else {
-						for (var i = 0; i < Console.code.length; i++) {
-							if (Console.code[i]) {
-								codeToRun += "\r\r" + Console.code[i];
-							}
-						}
+					} else {						 
 						var lastCharIndex = inputValue.length - 1;
 
 						if (Console.isStatement(inputValue)) {
@@ -152,8 +160,6 @@ var Console = {
 			$("body").scrollTop($("body").prop("scrollHeight"));
 
 			return false;
-		} else {
-			return true;
 		}
 
 	}
