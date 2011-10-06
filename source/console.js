@@ -83,7 +83,6 @@ var Console = {
 			case "ABOUT":
 			case "HELP":
 				history.append(Console.help);
-				Console.clearCode();
 				break;
 
 			default:
