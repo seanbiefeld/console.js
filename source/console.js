@@ -63,11 +63,9 @@ var Console = {
 
 					var isVariableDeclaration = inputValue.trim().substr(0, 3) === "var";
 
-					if (isVariableDeclaration || inputValue.indexOf("function ") >= 0 || inputValue.indexOf("[") >= 0) {
-						//codeToRun = Console.code + "\r\r ";
+					if (isVariableDeclaration || inputValue.indexOf("function ") >= 0) {
 						Console.code.push("\r\r " + inputValue);
 					} else {
-						//codeToRun = Console.code + "\r\r return " + inputValue + ";";
 						for (var i = 0; i < Console.code.length; i++) {
 							if (Console.code[i]) {
 								codeToRun += "\r\r" + Console.code[i];
