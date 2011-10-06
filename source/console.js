@@ -1,28 +1,49 @@
 var Console = {
-
 	code: [],
-	history: [],
-	historyPosition: Number.NaN,
+	history: {
+		items: [],
+		position: Number.NaN,
+		clear: function () {
+			"use strict";
+			this.items.splice(0, this.items.length);
+		},
+		nextItem: function () {
+			if (this.items.length > 0) {
+				if (this.position < this.items.length) {
+					this.position++;
+					return this.items[this.position];
+				}
+			}
+		},
+		previousItem: function () {
+			if (this.items.length > 0) {
+				if (isNaN(this.position)) {
+					this.position = this.items.length - 1;
+					return this.items[this.position];
+				} else {				
+					if (this.position > -1) {
+						this.position--;
+						return this.items[this.position];
+					}
+				}
+			}
+		}
+	},
 	clearCode: function () {
 		"use strict";
 		this.code.splice(0, this.code.length);
 	},
-	clearHistory: function () {
-		"use strict";
-		this.history.splice(0, this.history.length);
-	},
 	clear: function () {
 		"use strict";
-		this.clearHistory();
+		this.history.clear();
 		this.clearCode();
-		this.historyPosition = Number.NaN;
-	},	
+		this.history.position = Number.NaN;
+	},
 	evaluateCode: function (codeToRun) {
 		"use strict";
 		var func = new Function(codeToRun);
 		return func();
 	},
-
 	init: function () {
 		"use strict";
 		var console, inputContainer;
@@ -32,7 +53,6 @@ var Console = {
 		inputContainer = $("<div></div>").addClass("inputContainer").appendTo(console);
 		$("<input></input>").attr("placeholder", "start scripting here...").addClass("input").keydown(this.codeEntered).appendTo(inputContainer).focus();
 	},
-
 	isStatement: function (value) {
 		"use strict";
 		var isStatement = false;
@@ -55,38 +75,23 @@ var Console = {
 		
 		//go back in history
 		if ((e.which && e.which === 38) || (e.keyCode && e.keyCode === 38)) {
-			if (Console.history.length > 0) {
-				if (isNaN(Console.historyPosition)) {
-					Console.historyPosition = Console.history.length - 1;
-					input.val(Console.history[Console.historyPosition]);
-				} else {				
-					if (Console.historyPosition > -1) {
-						Console.historyPosition--;
-						input.val(Console.history[Console.historyPosition]);					
-					}
-				}
-			}
+			input.val(Console.history.previousItem());
 		}
 		
 		//go forward in history
 		if ((e.which && e.which === 40) || (e.keyCode && e.keyCode === 40)) {
-			if (Console.history.length > 0) {
-				if (Console.historyPosition < Console.history.length) {
-					Console.historyPosition++;
-					input.val(Console.history[Console.historyPosition]);				
-				}
-			}
+			input.val(Console.history.nextItem());
 		}
 		
 		if ((e.which && e.which === 13) || (e.keyCode && e.keyCode === 13)) {
 			history.append("&gt;&gt; " + inputValue.replace(/>/gi, "&gt;").replace(/</gi, "&lt;") + "<br />");
-			Console.historyPosition = Number.NaN;
-			Console.history.push(inputValue);
+			Console.history.position = Number.NaN;
+			Console.history.items.push(inputValue);
 			
 			switch (inputValue.toUpperCase()) {
 			case "CLEAR":
 				Console.clear();
-				history.append("&gt;&gt; " + inputValue.replace(/>/gi, "&gt;").replace(/</gi, "&lt;") + "<br />");
+				history.html("");				
 				break;
 
 			case "ABOUT":
@@ -129,11 +134,11 @@ var Console = {
 
 					if (evaluation || evaluation === 0 || evaluation === false) {
 						history.append('<span style="color:#8F9D6A">=&gt; ' + evaluation + "</span><br/>");
-					}
-					
-					if(!evaluation && !isVariableDeclaration && !isFunction && !isAssignment) {
-						evaluation = '<span style="color:#CF6A4C">' + evaluation + "</span>";
-						history.append(evaluation + "<br/>");
+					} else {
+						if(!evaluation && !isVariableDeclaration && !isFunction && !isAssignment) {
+							evaluation = '<span style="color:#CF6A4C">' + evaluation + "</span>";
+							history.append(evaluation + "<br/>");
+						}
 					}
 				} catch (error) {
 					evaluation = '<span style="color:#CF6A4C">' + error + "</span>";
