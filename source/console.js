@@ -62,8 +62,9 @@ var Console = {
 					var codeToRun = "";
 
 					var isVariableDeclaration = inputValue.trim().substr(0, 3) === "var";
+					var isFunction = inputValue.indexOf("function ") >= 0;
 
-					if (isVariableDeclaration || inputValue.indexOf("function ") >= 0) {
+					if (isVariableDeclaration || isFunction) {
 						Console.code.push("\r\r " + inputValue);
 					} else {
 						for (var i = 0; i < Console.code.length; i++) {
@@ -88,6 +89,11 @@ var Console = {
 
 					if (evaluation || evaluation === 0) {
 						history.append('<span style="color:#8F9D6A">=&gt; ' + evaluation + "</span><br/>");
+					}
+					
+					if(!evaluation && !isVariableDeclaration && !isFunction) {
+						evaluation = '<span style="color:#CF6A4C">' + evaluation + "</span>";
+						history.append(evaluation + "<br/>");
 					}
 				} catch (error) {
 					evaluation = '<span style="color:#CF6A4C">' + error + "</span>";
