@@ -10,37 +10,6 @@ var Console = {
 		}
 		return code;
 	},
-	history: {
-		items: [],
-		position: Number.NaN,
-		clear: function () {
-			"use strict";
-			this.items.splice(0, this.items.length);
-		},
-		nextItem: function () {
-			"use strict";
-			if (this.items.length > 0) {
-				if (this.position < this.items.length) {
-					this.position++;
-					return this.items[this.position];
-				}
-			}
-		},
-		previousItem: function () {
-			"use strict";
-			if (this.items.length > 0) {
-				if (isNaN(this.position)) {
-					this.position = this.items.length - 1;
-					return this.items[this.position];
-				} else {				
-					if (this.position > -1) {
-						this.position--;
-						return this.items[this.position];
-					}
-				}
-			}
-		}
-	},
 	clearCode: function () {
 		"use strict";
 		this.code.splice(0, this.code.length);
@@ -65,18 +34,20 @@ var Console = {
 		inputContainer = $("<div></div>").addClass("inputContainer").appendTo(console);
 		$("<input></input>").attr("placeholder", "start scripting here...").addClass("input").keydown(this.codeEntered).appendTo(inputContainer).focus();
 	},
-	isStatement: function (value) {
+	isStatement: function (statement) {
 		"use strict";
 		var isStatement = false;
-		isStatement = isStatement || value.trim().substr(0, 3) === "for";
-		isStatement = isStatement || value.trim().substr(0, 5) === "while";
-		isStatement = isStatement || value.trim().substr(0, 2) === "do";
-		isStatement = isStatement || value.trim().substr(0, 2) === "if";
-		isStatement = isStatement || value.trim().substr(0, 5) === "switch";
-		isStatement = isStatement || value.trim().substr(0, 3) === "try";
+		if (statement) {
+			isStatement = isStatement || statement.trim().substr(0, 3) === "for";
+			isStatement = isStatement || statement.trim().substr(0, 5) === "while";
+			isStatement = isStatement || statement.trim().substr(0, 2) === "do";
+			isStatement = isStatement || statement.trim().substr(0, 2) === "if";
+			isStatement = isStatement || statement.trim().substr(0, 5) === "switch";
+			isStatement = isStatement || statement.trim().substr(0, 3) === "try";
+		}
 		return isStatement;
 	},
-	help: ' <br/><h3 style=""> --------| welcome to console.js |---------</h3> the intent of this application is to provide<br /> a <a href="http://en.wikipedia.org/wiki/Read-eval-print_loop" style="color:#7386a5" target="_blank">REPL</a> type interactive interface to encourage <br /> learning, debugging and having fun with javascript<br /> any typical javascript can be called, plus,<br /> jquery is referenced, so that can be used as well<br/><br /> <span style="font-weight:bolder;">commands: </span><br /><br /><div style="padding-left: 30px;"><span style="font-weight:bold;">clear</span> - clears any previous functions,variables</span><br /><span style="font-weight:bold;">help,about</span> - about console.js, list of commands<br /><span style="font-weight:bold;">Console.code</span> - view previously entered members<br/><span style="font-weight:bold;font-size:2em;">&uarr;</span> - previously typed items, back in history<br/><span style="font-weight:bold;font-size:2em;">&darr;</span> - previously typed items, forward in history</div><br/>',
+	help: ' <br/><h3 style=""> --------| welcome to console.js |---------</h3> the intent of this application is to provide<br /> a <a href="http://en.wikipedia.org/wiki/Read-eval-print_loop" style="color:#7386a5" target="_blank">REPL</a> type interactive interface to encourage <br /> learning, debugging and having fun with javascript<br /> any typical javascript can be called, plus,<br /> jquery is referenced, so that can be used as well<br/><br /> <span style="font-weight:bolder;">note: </span>to see results in the output wrap the<br/> statements in a function that returns a string<br/><br /> <span style="font-weight:bolder;">commands: </span><br /><br /><div style="padding-left: 30px;"><span style="font-weight:bold;">clear</span> - clears any previous functions,variables</span><br /><span style="font-weight:bold;">help,about</span> - about console.js, list of commands<br /><span style="font-weight:bold;">Console.code</span> - view previously entered members<br/><span style="font-weight:bold;font-size:2em;">&uarr;</span> - previously typed items, back in history<br/><span style="font-weight:bold;font-size:2em;">&darr;</span> - previously typed items, forward in history</div><br/>',
 	codeEntered: function (e) {
 		"use strict";
 		var input, console, history, evaluation, inputValue;
@@ -162,6 +133,38 @@ var Console = {
 			return false;
 		}
 
+	}
+};
+
+Console.history = {
+	items: [],
+	position: Number.NaN,
+	clear: function () {
+		"use strict";
+		this.items.splice(0, this.items.length);
+	},
+	nextItem: function () {
+		"use strict";
+		if (this.items.length > 0) {
+			if (this.position < this.items.length) {
+				this.position++;
+				return this.items[this.position];
+			}
+		}
+	},
+	previousItem: function () {
+		"use strict";
+		if (this.items.length > 0) {
+			if (isNaN(this.position)) {
+				this.position = this.items.length - 1;
+				return this.items[this.position];
+			} else {				
+				if (this.position > -1) {
+					this.position--;
+					return this.items[this.position];
+				}
+			}
+		}
 	}
 };
 
