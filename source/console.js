@@ -11,6 +11,12 @@ var Console = {
 		"use strict";
 		this.history.splice(0, this.history.length);
 	},
+	clear: function () {
+		"use strict";
+		this.clearHistory();
+		this.clearCode();
+		this.historyPosition = Number.NaN;
+	},	
 	evaluateCode: function (codeToRun) {
 		"use strict";
 		var func = new Function(codeToRun);
@@ -24,7 +30,7 @@ var Console = {
 		$("<pre></pre>").addClass("history").appendTo(console);
 		$("<div></div>").html("&gt;").addClass("caret").appendTo(console);
 		inputContainer = $("<div></div>").addClass("inputContainer").appendTo(console);
-		$("<input></input>").attr("placeholder", "start scripting here...").addClass("input").keyup(this.codeEntered).appendTo(inputContainer).focus();
+		$("<input></input>").attr("placeholder", "start scripting here...").addClass("input").keydown(this.codeEntered).appendTo(inputContainer).focus();
 	},
 
 	isStatement: function (value) {
@@ -49,33 +55,37 @@ var Console = {
 		
 		//go back in history
 		if ((e.which && e.which === 38) || (e.keyCode && e.keyCode === 38)) {
-			if (isNaN(Console.historyPosition)) {
-				Console.historyPosition = Console.history.length - 1;
-				input.val(Console.history[Console.historyPosition]);
-			} else {				
-				if (Console.historyPosition > -1) {
-					Console.historyPosition--;
-					input.val(Console.history[Console.historyPosition]);					
+			if (Console.history.length > 0) {
+				if (isNaN(Console.historyPosition)) {
+					Console.historyPosition = Console.history.length - 1;
+					input.val(Console.history[Console.historyPosition]);
+				} else {				
+					if (Console.historyPosition > -1) {
+						Console.historyPosition--;
+						input.val(Console.history[Console.historyPosition]);					
+					}
 				}
 			}
 		}
 		
 		//go forward in history
 		if ((e.which && e.which === 40) || (e.keyCode && e.keyCode === 40)) {
-			if (Console.historyPosition < Console.history.length) {
-				Console.historyPosition++;
-				input.val(Console.history[Console.historyPosition]);				
+			if (Console.history.length > 0) {
+				if (Console.historyPosition < Console.history.length) {
+					Console.historyPosition++;
+					input.val(Console.history[Console.historyPosition]);				
+				}
 			}
 		}
 		
 		if ((e.which && e.which === 13) || (e.keyCode && e.keyCode === 13)) {
 			history.append("&gt;&gt; " + inputValue.replace(/>/gi, "&gt;").replace(/</gi, "&lt;") + "<br />");
+			Console.historyPosition = Number.NaN;
 			Console.history.push(inputValue);
 			
 			switch (inputValue.toUpperCase()) {
 			case "CLEAR":
-				Console.clearCode();
-				Console.clearHistory();
+				Console.clear();
 				history.append("&gt;&gt; " + inputValue.replace(/>/gi, "&gt;").replace(/</gi, "&lt;") + "<br />");
 				break;
 
