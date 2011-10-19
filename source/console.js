@@ -90,10 +90,11 @@ var Console = {
 					var isVariableDeclaration = inputValue.trim().substr(0, 3) === "var";
 					var isFunction = inputValue.indexOf("function ") >= 0;
 					var isAssignment = inputValue.indexOf("=") >= 0;
-					var isInvocation = (inputValue.indexOf(")") === inputValue.length - 1) || (inputValue.indexOf(")") === inputValue.length - 2);
+					var hasKeyword = inputValue.indexOf("delete ") > - 1;
+					var isInvocation = inputValue.indexOf(".") > - 1 && (inputValue.indexOf(")") === inputValue.length -1 || inputValue.indexOf(")") === inputValue.length -2);
 					var codeToRun = Console.codeAsString();
 					
-					if (isVariableDeclaration || isFunction || isAssignment || isInvocation) {
+					if (isVariableDeclaration || isFunction || isAssignment || hasKeyword || isInvocation) {
 						Console.evaluateCode(codeToRun + "\r\r" + inputValue);
 						Console.code.push("\r\r " + inputValue);
 					} else {						 
@@ -115,7 +116,7 @@ var Console = {
 					if (evaluation || evaluation === 0 || evaluation === false) {
 						history.append('<span style="color:#8F9D6A">=&gt; ' + evaluation + "</span><br/>");
 					} else {
-						if(!evaluation && !isVariableDeclaration && !isFunction && !isAssignment && !isInvocation) {
+						if(!evaluation && !isVariableDeclaration && !isFunction && !isAssignment && !hasKeyword && !isInvocation) {
 							evaluation = '<span style="color:#CF6A4C">' + evaluation + "</span>";
 							history.append(evaluation + "<br/>");
 						}

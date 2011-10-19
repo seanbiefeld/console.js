@@ -9,3 +9,11 @@ function changeColor(newColor){$("#mydiv").css({'background-color':newColor});}
 var flight = { airline: "oceanic", number: 815, departure:{IATA:"SYD",time:"2004-09-22 14:55",city:"Sydney"}, arrival:{IATA: "LAX",time:"2004-09-23 10:42",city:"los angeles"}};
 
 var character = { "first-name": "Phillip", "last-name": "Fry" };
+
+function reflectOverObject(someObject){ var values; for (var name in someObject) { if (typeof someObject[name] !== 'function') { values += "\r" + name + ': ' + someObject[name]; } } return values; }
+
+Number.method('integer', function ( ) { return Math[this < 0 ? 'ceil' : 'floor'](this); });
+
+String.method('trim', function ( ) { return this.replace(/^\s+|\s+$/g, ''); });
+
+var fade = function (node) { var level = 1; var step = function ( ) { var hex = level.toString(2); node.style.backgroundColor = '#2222' + hex + hex; if (level < 1) { level += 1; setTimeout(step, 100); } }; setTimeout(step, 100); };
